@@ -10,22 +10,15 @@ import (
 // ErrDuplicateKey is returned when duplicate key names are detected
 // inside a JSON object
 type ErrDuplicateKey struct {
-	Path []string
-	Key  string
+	path []string
+	key  string
 }
 
 func (e *ErrDuplicateKey) Error() string {
-	if len(e.Path) > 0 {
-		return fmt.Sprintf(`duplicate key "%s" at path: %s`, e.Key, strings.Join(e.Path, "."))
+	if len(e.path) > 0 {
+		return fmt.Sprintf(`duplicate key "%s" at path: %s`, e.key, strings.Join(e.path, "."))
 	}
-	return fmt.Sprintf(`duplicate key "%s"`, e.Key)
-}
-
-func NewErrDuplicateKey(path []string, key string) error {
-	return &ErrDuplicateKey{
-		Path: path,
-		Key:  key,
-	}
+	return fmt.Sprintf(`duplicate key "%s"`, e.key)
 }
 
 // ValidateNoDuplicateKeys verifies the provided JSON object contains
@@ -74,7 +67,7 @@ func checkToken(dec *json.Decoder, path []string) error {
 
 			if keys[key] {
 				// Duplicate found
-				return NewErrDuplicateKey(path, key)
+				return &ErrDuplicateKey{path: path, key: key}
 			}
 			keys[key] = true
 
