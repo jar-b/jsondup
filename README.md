@@ -1,4 +1,5 @@
 # jsondup
+[![build](https://github.com/jar-b/jsondup/actions/workflows/build.yml/badge.svg)](https://github.com/jar-b/jsondup/actions/workflows/build.yml)
 
 Detect duplicate keys in a JSON object.
 
