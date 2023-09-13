@@ -41,7 +41,6 @@ func ValidateNoDuplicateKeys(s string) error {
 //
 // Adapted from: https://stackoverflow.com/a/50109335
 func checkToken(dec *json.Decoder, path []string) error {
-	var dupErrs []error
 	t, err := dec.Token()
 	if err != nil {
 		return err
@@ -53,6 +52,7 @@ func checkToken(dec *json.Decoder, path []string) error {
 		return nil
 	}
 
+	var dupErrs []error
 	switch delim {
 	case '{':
 		keys := make(map[string]bool)
