@@ -2,6 +2,7 @@ package jsondup
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -15,10 +16,7 @@ type ErrDuplicateKey struct {
 }
 
 func (e *ErrDuplicateKey) Error() string {
-	if len(e.path) > 0 {
-		return fmt.Sprintf(`duplicate key "%s" at path: %s`, e.key, strings.Join(e.path, "."))
-	}
-	return fmt.Sprintf(`duplicate key "%s"`, e.key)
+	return fmt.Sprintf(`duplicate key "%s"`, strings.Join(append(e.path, e.key), "."))
 }
 
 // ValidateNoDuplicateKeys verifies the provided JSON object contains
@@ -43,6 +41,7 @@ func ValidateNoDuplicateKeys(s string) error {
 //
 // Adapted from: https://stackoverflow.com/a/50109335
 func checkToken(dec *json.Decoder, path []string) error {
+	var dupErrs []error
 	t, err := dec.Token()
 	if err != nil {
 		return err
@@ -67,13 +66,13 @@ func checkToken(dec *json.Decoder, path []string) error {
 
 			if keys[key] {
 				// Duplicate found
-				return &ErrDuplicateKey{path: path, key: key}
+				dupErrs = append(dupErrs, &ErrDuplicateKey{path: path, key: key})
 			}
 			keys[key] = true
 
 			// Check the keys value
 			if err := checkToken(dec, append(path, key)); err != nil {
-				return err
+				dupErrs = append(dupErrs, err)
 			}
 		}
 
@@ -87,7 +86,7 @@ func checkToken(dec *json.Decoder, path []string) error {
 		for dec.More() {
 			// Check each items value
 			if err := checkToken(dec, append(path, strconv.Itoa(i))); err != nil {
-				return err
+				dupErrs = append(dupErrs, err)
 			}
 			i++
 		}
@@ -99,5 +98,5 @@ func checkToken(dec *json.Decoder, path []string) error {
 		}
 	}
 
-	return nil
+	return errors.Join(dupErrs...)
 }

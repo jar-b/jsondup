@@ -63,5 +63,5 @@ A more complex example might be an AWS IAM policy document with duplicated `Cond
 
 ```console
 $ jsondup iam.json
-2023/09/12 15:57:15 duplicate key "StringEquals" at path: Statement.0.Condition
+2023/09/12 15:57:15 duplicate key "Statement.0.Condition.StringEquals"
 ```
