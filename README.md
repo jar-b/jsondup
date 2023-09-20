@@ -7,7 +7,7 @@ Detect duplicate keys in a JSON object.
 ## Installation
 
 ```console
-$ go install github.com/jar-b/jsondup@latest
+go install github.com/jar-b/jsondup/cmd/jsondup@latest
 ```
 
 ## Usage
