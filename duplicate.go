@@ -19,10 +19,10 @@ func (e *ErrDuplicateKey) Error() string {
 	return fmt.Sprintf(`duplicate key "%s"`, strings.Join(append(e.path, e.key), "."))
 }
 
-// Validate verifies the provided JSON object contains no duplicated keys
+// Validate verifies the provided JSON structure contains no duplicated keys
 //
-// The function expects a single JSON object, and will error prior to
-// checking for duplicate keys should an invalid input be provided.
+// The function expects a single JSON object or array, and will error prior
+// to checking for duplicate keys should an invalid input be provided.
 func Validate(s string) error {
 	var out any
 	if err := json.Unmarshal([]byte(s), &out); err != nil {
@@ -33,10 +33,10 @@ func Validate(s string) error {
 	return checkToken(dec, nil)
 }
 
-// checkToken walks a JSON object checking for duplicated keys
+// checkToken walks a JSON structure checking for duplicated keys
 //
 // The function is called recursively on the value of each key
-// inside and object, or item inside an array.
+// inside an object, or item inside an array.
 //
 // Adapted from: https://stackoverflow.com/a/50109335
 func checkToken(dec *json.Decoder, path []string) error {

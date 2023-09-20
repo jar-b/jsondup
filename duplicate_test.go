@@ -16,7 +16,17 @@ func TestValidate(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "root",
+			name:    "invalid multiple objects",
+			s:       `{"a": "foo"}{"b": "bar"}`,
+			wantErr: true,
+		},
+		{
+			name:    "invalid multiple arrays",
+			s:       `["a"]["b"]`,
+			wantErr: true,
+		},
+		{
+			name: "object root duplicate",
 			s: `{
   "a": "foo",
   "a": "bar"
@@ -24,7 +34,7 @@ func TestValidate(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "nested object",
+			name: "object nested object duplicate",
 			s: `{
   "a": "foo",
   "b": {
@@ -35,7 +45,7 @@ func TestValidate(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "nested array",
+			name: "object nested array duplicate",
 			s: `{
   "a": "foo",
   "b": {
@@ -55,7 +65,7 @@ func TestValidate(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "multiple",
+			name: "object multiple duplicates",
 			s: `{
   "a": "foo",
   "a": "bar",
@@ -77,7 +87,7 @@ func TestValidate(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "valid",
+			name: "object valid",
 			s: `{
   "a": "foo",
   "b": {
@@ -94,6 +104,31 @@ func TestValidate(t *testing.T) {
   }
 }`,
 			wantErr: false,
+		},
+		{
+			name: "array valid",
+			s: `[
+  {
+    "a": "foo"
+  },
+  {
+    "b": "bar"
+  }
+]`,
+			wantErr: false,
+		},
+		{
+			name: "array duplicate",
+			s: `[
+  {
+    "a": "foo",
+    "a": "bar"
+  },
+  {
+    "b": "baz"
+  }
+]`,
+			wantErr: true,
 		},
 	}
 
