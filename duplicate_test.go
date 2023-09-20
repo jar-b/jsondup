@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestValidateNoDuplicateKeys(t *testing.T) {
+func TestValidate(t *testing.T) {
 	tests := []struct {
 		name    string
 		s       string
@@ -99,8 +99,8 @@ func TestValidateNoDuplicateKeys(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := ValidateNoDuplicateKeys(tt.s); (err != nil) != tt.wantErr {
-				t.Errorf("ValidateNoDuplicateKeys() error = %v, wantErr %v", err, tt.wantErr)
+			if err := Validate(tt.s); (err != nil) != tt.wantErr {
+				t.Errorf("Validate() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

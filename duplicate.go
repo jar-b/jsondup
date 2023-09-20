@@ -19,13 +19,12 @@ func (e *ErrDuplicateKey) Error() string {
 	return fmt.Sprintf(`duplicate key "%s"`, strings.Join(append(e.path, e.key), "."))
 }
 
-// ValidateNoDuplicateKeys verifies the provided JSON object contains
-// no duplicated keys
+// Validate verifies the provided JSON object contains no duplicated keys
 //
 // The function expects a single JSON object, and will error prior to
 // checking for duplicate keys should an invalid input be provided.
-func ValidateNoDuplicateKeys(s string) error {
-	var out map[string]any
+func Validate(s string) error {
+	var out any
 	if err := json.Unmarshal([]byte(s), &out); err != nil {
 		return fmt.Errorf("unmarshaling input: %w", err)
 	}

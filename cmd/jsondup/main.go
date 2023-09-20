@@ -27,7 +27,7 @@ func main() {
 		log.Fatalf("reading file: %s", err)
 	}
 
-	if err := jsondup.ValidateNoDuplicateKeys(string(b)); err != nil {
+	if err := jsondup.Validate(string(b)); err != nil {
 		log.Fatal(err)
 	}
 }
